@@ -26,15 +26,15 @@ if [ ! "$PREV_HASH" == "$CURR_HASH" ]; then
   echo "Making build."
   git pull
   make clean
-  make DEBUG=1
   make dist DEBUG=1
   echo "Copying build to $CEEGEE_BUILD_DEST_DIR..."
   cp dist/*.zip "$CEEGEE_BUILD_DEST_DIR"
   echo "Symlinking latest file..."
   rm "$CEEGEE_BUILD_DEST_DIR"ceegee-master-debug-latest.zip
   ln -s `ls -td1 "$CEEGEE_BUILD_DEST_DIR"*.zip | head -n 1` "$CEEGEE_BUILD_DEST_DIR"ceegee-master-debug-latest.zip
-  echo "Saving date..."
-  date > "$CEEGEE_BUILD_DEST_DIR".latest
+  echo "Saving date and build info..."
+  echo `git describe --all | sed s@heads/@@`-`git rev-list HEAD --count`-`git rev-parse --short HEAD` > "$CEEGEE_BUILD_DEST_DIR".latest-info
+  date > "$CEEGEE_BUILD_DEST_DIR".latest-ts
   echo "Done!"
 else
   echo "No need to make a build."
