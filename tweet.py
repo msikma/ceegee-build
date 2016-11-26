@@ -3,6 +3,9 @@ from twitter import *
 import sys
 import argparse
 
+# Invocation example for Bash:
+# $ ./tweet.py --url="http://asdf.com/" --count="108" --branch="master" --hash="hash" --atoken="$CEEGEE_TWTR_A_T" --asecret="$CEEGEE_TWTR_A_S" --ctoken="$CEEGEE_TWTR_C_T" --csecret="$CEEGEE_TWTR_C_S"
+
 parser = argparse.ArgumentParser()
 parser.add_argument('--url', help='URL to the new build')
 parser.add_argument('--count', help='Build number (number of commits in the branch)')
