@@ -3,6 +3,7 @@ from twitter import *
 import sys
 import argparse
 
+# Save the path to this script in a Bash variable named CEEGEE_TWTR_SCRIPT.
 # Invocation example for Bash:
 # $ ./tweet.py --url="http://asdf.com/" --count="108" --branch="master" --hash="hash" --atoken="$CEEGEE_TWTR_A_T" --asecret="$CEEGEE_TWTR_A_S" --ctoken="$CEEGEE_TWTR_C_T" --csecret="$CEEGEE_TWTR_C_S"
 

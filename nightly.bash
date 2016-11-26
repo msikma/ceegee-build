@@ -35,6 +35,10 @@ if [ ! "$PREV_HASH" == "$CURR_HASH" ]; then
   echo "Saving date and build info..."
   echo `git describe --all | sed s@heads/@@`-`git rev-list HEAD --count`-`git rev-parse --short HEAD` > "$CEEGEE_BUILD_DEST_DIR".latest-info
   date > "$CEEGEE_BUILD_DEST_DIR".latest-ts
+  echo "Tweeting about the new release..."
+  LATEST=`ls -td1 "$CEEGEE_ROOT_DIR"dist/*.zip | head -n 1`
+  LATEST_BASE=`basename $LATEST`
+  eval "$CEEGEE_TWTR_SCRIPT" --url="http://ceegee.whahay.com/nightly/$LATEST_BASE" --count=`git rev-list HEAD --count` --branch=`git describe --all | sed s@heads/@@` --hash=`git rev-parse --short HEAD` --atoken="$CEEGEE_TWTR_A_T" --asecret="$CEEGEE_TWTR_A_S" --ctoken="$CEEGEE_TWTR_C_T" --csecret="$CEEGEE_TWTR_C_S"
   echo "Done!"
 else
   echo "No need to make a build."
