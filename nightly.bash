@@ -12,6 +12,11 @@ if [ -z ${CEEGEE_BUILD_DEST_DIR+x} ]; then
   echo "This is where build .zip files will be placed."
   exit 1
 fi
+if [ -z ${EMDOSBOX_ROOT} ]; then
+  echo "Error: \$EMDOSBOX_ROOT is not set."
+  echo "This is needed to build Emscripten pages."
+  exit 1
+fi
 
 cd "$CEEGEE_ROOT_DIR"
 git checkout master
@@ -35,6 +40,18 @@ if [ ! "$PREV_HASH" == "$CURR_HASH" ]; then
   echo "Saving date and build info..."
   echo `git describe --all | sed s@heads/@@`-`git rev-list HEAD --count`-`git rev-parse --short HEAD` > "$CEEGEE_BUILD_DEST_DIR".latest-info
   date > "$CEEGEE_BUILD_DEST_DIR".latest-ts
+  echo "Creating Emscripten package"
+  rm -rf /tmp/ceegee-em
+  mkdir -p /tmp/ceegee-em
+  cp -r dist/ceegee /tmp/ceegee-em
+  cd /tmp/ceegee-em
+  cp "$EMDOSBOX_ROOT"dosbox.html /tmp/ceegee-em
+  cp "$EMDOSBOX_ROOT"dosbox.html.mem /tmp/ceegee-em
+  cp "$EMDOSBOX_ROOT"dosbox.js /tmp/ceegee-em
+  eval "$EMDOSBOX_ROOT"packager.py ceegee /tmp/ceegee-em/ceegee cgdebug.exe
+  rm -rf "$CEEGEE_BUILD_DEST_DIR"/em
+  mkdir -p "$CEEGEE_BUILD_DEST_DIR"/em
+  cp /tmp/ceegee-em/* "$CEEGEE_BUILD_DEST_DIR"/em
   echo "Tweeting about the new release..."
   LATEST=`ls -td1 "$CEEGEE_ROOT_DIR"dist/*.zip | head -n 1`
   LATEST_BASE=`basename $LATEST`
